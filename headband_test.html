@@ -33,10 +33,8 @@
     </div>
   </div>
 
-
-<!--  Experimenting with filling the rectangle with an image 
-<p>Image to use:</p>
-<img id="lights" width="220" height="277" src="C:\Users\Ralph\Pictures\light.JPG" alt="The Scream" style="display: none;"> -->
+  <p>Image to use:</p>
+<img id="lights" width="220" height="277" src="C:\Users\Ralph\Pictures\Xmas_lights_DC.JPG" alt="The Scream" style="display: none;">
 
   <script>
     window.onload = function() {
@@ -58,23 +56,17 @@
         if(!event.data) return;
 
           event.data.faces.forEach(function(rect) {
-            //Draws a rectangle on the forehead with a picture in it
+            context.strokeStyle = '#fff';
             //var img=document.getElementById("lights");
             //var pat=context.createPattern(img,"repeat");
-            //context.rect(rect.x+10, rect.y+20, rect.width-20, -rect.height/4);
-
-            //Draws a plain white rectangle on the forehead
             context.fillRect(rect.x+10, rect.y+20, rect.width-20, -rect.height/4);
-            context.fillStyle = "#fff";
-            context.fill();
-
-            //Displays the coordinates of the tracked face on the screen
             // context.font = '11px Helvetica';
+            context.fillStyle = "#111";
+            context.fill();
             // context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
             // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
           });
 
-          //Draws dots on the landmarks of the face
           event.data.landmarks.forEach(function(landmarks) {
             for(var l in landmarks){
               context.beginPath();
