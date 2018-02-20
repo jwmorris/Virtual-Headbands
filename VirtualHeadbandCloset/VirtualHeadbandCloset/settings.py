@@ -25,8 +25,7 @@ SECRET_KEY = 'd)r1s@zss+0t2d9a6%aouqlfc&il&k4dmfkt*8$is*li(k^wr!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['sd-vm18.csc.ncsu.edu']
 
 # Application definition
 
