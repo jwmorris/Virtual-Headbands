@@ -21,13 +21,20 @@ p {
 	
 	<script src="../js/objectdetect.js"></script>
 	<script src="../js/objectdetect.frontalface_alt.js"></script>
-	
+	<script>
+			// getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
+			if (window.location.protocol == "file:") {
+				alert("You seem to be running this example directly from a file. Note that these examples only work when served from a server or localhost due to canvas cross-domain restrictions.");
+			} else if (window.location.hostname !== "localhost" && window.location.protocol !== "https:"){
+				window.location.protocol = "https";
+			}
+		</script>
 	<script>
 	window.onload = function() {
 	
 		var smoother = new Smoother([0.9999999, 0.9999999, 0.999, 0.999], [0, 0, 0, 0]),
 			video = document.getElementById('video'),
-			glasses = document.getElementById('glasses'),
+			headband = document.getElementById('headband'),
 			detector;
 				
 		try {
@@ -70,23 +77,23 @@ p {
 					coord[2] *= video.videoWidth / detector.canvas.width;
 					coord[3] *= video.videoHeight / detector.canvas.height;
 					
-					// Display glasses overlay: 
-					glasses.style.left    = ~~(coord[0] + coord[2] * 1.0/8 + video.offsetLeft + 215) + 'px';
-					glasses.style.top     = ~~(coord[1] + coord[3] * 0.8/8 + video.offsetTop - 45) + 'px';
-					glasses.style.width   = ~~(coord[2] * 6/8 + 75) + 'px';
-					glasses.style.height  = ~~(coord[3] * 6/8) + 'px';
-					glasses.style.opacity = 1;
+					// Display headband overlay: 
+					headband.style.left    = (coord[0]) + 'px';
+					headband.style.top     = (coord[1]) + 'px';
+					headband.style.width   = (coord[2]) + 'px';
+					headband.style.height  = (coord[3]) + 'px';
+					headband.style.opacity = 1;
 					
 				} else {
-					var opacity = glasses.style.opacity - 0.2;
-					glasses.style.opacity = opacity > 0 ? opacity : 0;
+					var opacity = headband.style.opacity - 0.2;
+					headband.style.opacity = opacity > 0 ? opacity : 0;
 				}
 			}
 		}
 		
 		[].slice.call(document.getElementById('list').children).forEach(function(e) {
 			e.addEventListener('click', function() {
-				glasses.src = e.src;
+				headband.src = e.src;
 			}, false);
 		});
 	};
@@ -103,7 +110,7 @@ p {
 	<!-- Camera Feed -->
 	
 	
-		<video id="video" style="background-color:lightblue; height: 75%; width: 75%; float: left;"></video>
+		<video id="video" style="background-color:lightblue; height: 120; width: 120; float: left;"></video>
 		
 	
 	
@@ -122,7 +129,7 @@ p {
 	<div style = "background-color:lightblue; height: 25%; width: 100%;">
 		<center>Product Name</center>
 		<button style= "width:33%; height:50%;" type="button">Add to Cart (#)</button>
-		<button style= "width:33%; height:50%; " type="button">Take Picture</button>
+		<button style= "width:33%; height:50%; " type="button" onclick="snap()">Take Picture</button>
 		<button style= "width:33%; height:50%; " type="button">Checkout/Return</button>
 		<p align="center" style="font-size:145%; color:White">The Closet</p>
 	</div>
@@ -130,6 +137,8 @@ p {
 </div>
 
 <div id="list">
+		<canvas id="c"></canvas>
+
 		<img src="img/flower.png" style="width: 117px;">
 		<img src="img/Bohemian_Headband.png" style="width: 117px;">
 		<img src="img/Rising_Sun_Headband.png" style="width: 117px;">
@@ -138,8 +147,44 @@ p {
 		<img src="img/Cat_Ear_Headband.png" style="width: 117px;">
 		<img src="img/Red.png" style="width: 117px;">
 		<img src="img/H.png" style="width: 117px;">
+
 	</div>
 
-	<img id="glasses" src="img/flower.png" style="position: absolute; display: block; opacity: 0">
+	<img id="headband" src="img/flower.png" style="position: absolute; display: block; opacity: 0">
+	<script>
+		// Get handles on the video and canvas elements
+		var hb = document.getElementById('headband');
+		var video = document.querySelector('video');
+		var canvas = document.querySelector('canvas');
+		// Get a handle on the 2d context of the canvas element
+		var context = canvas.getContext('2d');
+		// Define some vars required later
+		var w, h, ratio;
+		
+		// Add a listener to wait for the 'loadedmetadata' state so the video's dimensions can be read
+		video.addEventListener('loadedmetadata', function() {
+			// // Calculate the ratio of the video's width to height
+			// ratio = video.videoWidth / video.videoHeight;
+			// // Define the required width as 100 pixels smaller than the actual video's width
+			// w = video.videoWidth - 100;
+			// // Calculate the height based on the video's width and the ratio
+			// h = parseInt(w / ratio, 10);
+			h = video.videoHeight;
+			w = video.videoWidth;
+			// Set the canvas width and height to the values just calculated
+			canvas.width = video.videoWidth;
+			canvas.height = video.videoHeight;			
+		}, false);
+		
+		// Takes a snapshot of the video
+		function snap() {
+			// Define the size of the rectangle that will be filled (basically the entire element)
+			context.fillRect(0, 0, w, h);
+			// Grab the image from the video
+			context.drawImage(video, 0, 0, w, h);
+			context.drawImage(hb, 0, 0, hb.width, hb.height);
+		}
+		 
+	</script>
 </body>
 </html>
