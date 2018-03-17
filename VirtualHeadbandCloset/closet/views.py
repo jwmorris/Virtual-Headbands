@@ -3,7 +3,7 @@ from .models import Headband
 from django.shortcuts import get_object_or_404, render
 
 def index(request):
-    return HttpResponse("Welcome to the Headbands of Hope Virtual Closet!")
+	return render(request, 'closet/index.html')
 
 def try_on(request, s_id):
     hb = get_object_or_404(Headband, shopify_id=s_id)
