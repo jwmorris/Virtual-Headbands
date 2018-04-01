@@ -1,0 +1,92 @@
+body {
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+.vid {
+    /*position: fixed;*/
+    height: 100vh;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Add some content at the bottom of the video/page */
+.content {
+    position: fixed;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: #f1f1f1;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Style the button used to pause/play the video */
+.bottom_buttons {
+    width: 200px;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+    border: none;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+}
+
+.bottom_buttons:hover {
+    background: #ddd;
+    color: black;
+}
+
+.updownedit {
+    width: 15%;
+    position: fixed;
+    height: 20%;
+    z-index: 1;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    padding: 8px 0;
+}
+
+.sidenav {
+    width: 15%;
+    position: fixed;
+    max-height: 76vh;
+    z-index: 1;
+    top: 0px;
+    right: 0px;
+    background: rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    padding: 8px 0;
+}
+
+.sidenav img {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+    height: 10%;
+}
+
+.sidenav button {
+    background-color: white;
+    border: none;
+    color: #7ccdc9;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    height: 10%;
+}
+
+.sidenav img:hover {
+    color: #064579;
+}
