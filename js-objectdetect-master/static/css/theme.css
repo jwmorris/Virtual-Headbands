@@ -1,9 +1,25 @@
-body {
-    background-color: black;
+html, body {
+    background-color: white;
     margin: 0;
     padding: 0;
     min-height: 100vh;
     width: 100vw;
+	font-family: 'Brazilia';
+	font-weight: 100;
+}
+
+@font-face {
+	font-family: 'Brazilia';
+	src: url('../../fonts/Brazilia.otf') format('opentype');
+	font-style: normal;
+	font-weight: 100;
+}
+
+@font-face {
+	font-family: 'Brazilia';
+	src: url('../../fonts/Brazilia.otf') format('opentype');
+	font-style: normal;
+	font-weight: 300;
 }
 
 .vid {
@@ -13,14 +29,22 @@ body {
     margin: 0 auto;
 }
 
+.headband_name {
+	font-family: Brazilia;
+	font-weight: 300;
+}
+
 /* Add some content at the bottom of the video/page */
 .content {
     position: fixed;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.2);
     color: #f1f1f1;
     width: 100%;
     padding: 20px;
+	height: 16.7%;
+	font-family: 'Brazilia';
+	font-weight: 100;
 }
 
 /* Style the button used to pause/play the video */
@@ -28,9 +52,11 @@ body {
     width: 200px;
     text-align: center;
     font-size: 18px;
+	font-family: Brazilia;
+	font-weight: 100;
     padding: 10px;
     border: none;
-    background: #000;
+    background: #7ccdc9;
     color: #fff;
     cursor: pointer;
 }
@@ -43,23 +69,39 @@ body {
 .updownedit {
     width: 15%;
     position: fixed;
-    height: 20%;
+    height: 76%;
     z-index: 1;
     top: 0px;
     left: 0px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.0);
     overflow-x: hidden;
     padding: 8px 0;
+}
+.updownedit button {
+    background-color: #7ccdc9;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	font-family: Brazilia;
+	font-weight: 100;
+    margin: 4px 2px;
+    cursor: pointer;
+    height: 40%;
+	width: 80%;
 }
 
 .sidenav {
     width: 15%;
     position: fixed;
-    max-height: 76vh;
+    height: 76%;
     z-index: 1;
     top: 0px;
     right: 0px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.0);
     overflow-x: hidden;
     padding: 8px 0;
 }
@@ -68,20 +110,24 @@ body {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 25px;
+	font-family: Brazilia;
+	font-weight: 100;
     color: white;
     display: block;
-    height: 10%;
+    height: 15%;
 }
 
 .sidenav button {
-    background-color: white;
+    background-color: #7ccdc9;
     border: none;
-    color: #7ccdc9;
+    color: white;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+	font-family: Brazilia;
+	font-weight: 100;
     margin: 4px 2px;
     cursor: pointer;
     height: 10%;
@@ -89,4 +135,43 @@ body {
 
 .sidenav img:hover {
     color: #064579;
+}
+
+.sidenavbig {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    /*background-color: #111;*/
+	background: rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenavbig a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+	font-family: Brazilia;
+	font-weight: 100;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenavbig a:hover {
+    color: #f1f1f1;
+}
+
+.sidenavbig .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+	font-family: Brazilia;
+	font-weight: 100;
+    margin-left: 50px;
 }
