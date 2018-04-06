@@ -6,6 +6,7 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <script src="js/compatibility.js"></script>
 	<script src="js/smoother.js"></script>
@@ -23,7 +24,8 @@
 
 	<script>
 	window.onload = function() {
-		var increment = 0;
+		var heightIncrement = 0;
+		var widthIncrement = 0;
 		var upButton = document.getElementById("up");
     var downButton = document.getElementById("down");
 		var smoother = new Smoother([0.9999999, 0.9999999, 0.999, 0.999], [0, 0, 0, 0]),
@@ -73,21 +75,26 @@
 					coord[2] *= video.offsetWidth / detector.canvas.width;
 					coord[3] *= video.offsetHeight / detector.canvas.height;
 					
-					upButton.onclick = function(){
-						if(increment + coord[1] > 0) {	
-							increment -= 10;
-						}
-					}
-					downButton.onclick = function(){
-					  if((increment + coord[1])< video.offsetHeight) {
-						increment += 10;
-					  }
-					}
+					//upButton.onclick = function(){
+					//	if(increment + coord[1] > 0) {	
+					//		increment -= 10;
+					//	}
+					//}
+					//downButton.onclick = function(){
+					//  if((increment + coord[1])< video.offsetHeight) {
+					//	increment += 10;
+					//  }
+					//}
+					heightIncrement = document.getElementById('sliderHeight').value;
+					heightIncrement = heightIncrement - 50;
+					
+					widthIncrement = document.getElementById('sliderWidth').value;
+					widthIncrement = widthIncrement - 50;
 					
 					// Display headband overlay: 
-					headband.style.left    = (coord[0] + (windowWidth - video.offsetWidth)/2) + 'px';
-					headband.style.top     = (coord[1] - (detector.canvas.height*2)) + increment + 'px';
-					headband.style.width   = (coord[2] *.9) + 'px';
+					headband.style.left    = (coord[0] + (windowWidth - video.offsetWidth)/2) - widthIncrement + 'px';
+					headband.style.top     = (coord[1] - (detector.canvas.height*2)) + heightIncrement * (1.5) + 'px';
+					headband.style.width   = (coord[2] *.9) + widthIncrement * (1.5) + 'px';
 					headband.style.height  = (coord[3] *.9) + 'px';
 					headband.style.display = "block";
 					
@@ -98,6 +105,13 @@
 		}
 		
 		[].slice.call(document.getElementById('list').children).forEach(function(e) {
+			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
+					headband.src = e.src;
+					document.getElementById('productName').innerText = e.alt;
+			}, false);
+		}});
+		
+		[].slice.call(document.getElementById('overlayList').children).forEach(function(e) {
 			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
 					headband.src = e.src;
 					document.getElementById('productName').innerText = e.alt;
@@ -117,9 +131,15 @@
 
 <div class="updownedit" align="center">
 		<!--<h1 style="color:#7ccdc9;">Edit Position</h1>-->
-		<img src="img/hohLogo.png" style="width: 125px;">
-		<button id="up">Headband Up </button>
-		<button id="down">Headband Down</button>
+		<img src="img/hohLogo.png">
+		
+		<!-- Sliders -->
+		<p>Height:</p>
+		<input type="range" min="1" max="100" value="50" class="slider" id="sliderHeight" style="transform: rotate(90deg); left: -8.5px;">
+			
+		<p style="position: absolute; top: 450px; left: 40%">Width:</p>
+		<input type="range" min="1" max="100" value="50" class="slider" style="top: 500px;" id="sliderWidth">
+		
 </div>
 
 
@@ -135,20 +155,24 @@
 		<button onclick="openNav()">More Headbands</button>
 </div>
 
-<div id="sidenavbig" id="list" class="sidenavbig">
+<div id="sidenavbig" class="sidenavbig">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<img src="img/flower.png" alt="Blue Flower" style="width: 125px;">
-		<img src="img/headband_mesh.png" alt="Mesh Headband" style="width: 125px;">
-		<img src="img/headband_stones.png" alt="Stones Flower" style="width: 125px;">
-		<img src="img/headband_floral.png" alt="Floral Headband" style="width: 125px;">
-		<img src="img/414.png" alt="White Flower" style="width: 125px;">
-		<img src="img/Bohemian_Headband.png" style="width: 125px;">
-		<img src="img/Cat_Ear_Headband.png" style="width: 125px;">
-		<img src="img/Fire_Headband.png" style="width: 125px;">
-		<img src="img/H.png" style="width: 125px;">
-		<img src="img/Rising_Sun_Headband.png" style="width: 125px;">
-		<img src="img/Red.png" style="width: 125px;">
-		<img src="img/414.png" alt="White Flower" style="width: 125px;">
+
+		<div id="overlayList" class="overlayList" align="center">
+			<h1 style="color:white;"> Additional Headbands</h1>
+			<img src="img/flower.png" alt="Blue Flower" style="width: 125px;">
+			<img src="img/headband_mesh.png" alt="Mesh Headband" style="width: 125px;">
+			<img src="img/headband_stones.png" alt="Stones Flower" style="width: 125px;">
+			<img src="img/headband_floral.png" alt="Floral Headband" style="width: 125px;">
+			<img src="img/414.png" alt="White Flower" style="width: 125px;">
+			<img src="img/Bohemian_Headband.png" style="width: 125px;">
+			<img src="img/Cat_Ear_Headband.png" style="width: 125px;">
+			<img src="img/Fire_Headband.png" style="width: 125px;">
+			<img src="img/H.png" style="width: 125px;">
+			<img src="img/Rising_Sun_Headband.png" style="width: 125px;">
+			<img src="img/Red.png" style="width: 125px;">
+			<img src="img/414.png" alt="White Flower" style="width: 125px;">
+		</div>
 </div>
 
 <img id="logo" src="img/HOH_logo.png" visibility: hidden>
@@ -156,11 +180,11 @@
 <!-- Optional: some overlay text to describe the video -->
 <div class="content" align="center">
   <!-- <h1>Headbands of Hope Virtual Closet</h1> -->
-  <h1 id = productName class = "headband_name"> Product Name </h1>
+  <h1 id = productName> Product Name </h1>
   <!-- Use a button to pause/play the video with JavaScript -->
-  <button id="Add to Cart" class="bottom_buttons">Add to Cart</button>
+  <button id="Add to Cart"  class="bottom_buttons" onclick="addToCart()">Add to Cart</button>
   <button id="take_picture" class="bottom_buttons" onclick="snap()">Take a picture</button>
-  <button id="checkout" class="bottom_buttons">Checkout</button>
+  <button id="checkout" class="bottom_buttons" onclick="checkout()">Checkout</button>
 
 </div>
 <script>
@@ -202,6 +226,32 @@
 
 	function closeNav() {
 		document.getElementById("sidenavbig").style.width = "0";
+	}
+	</script>
+	
+	<script>
+	var cartSize = 0;
+	var headBandArray = [];
+	function addToCart() {
+		
+		cartSize = cartSize + 1;
+		headBandArray[headBandArray.length] = document.getElementById('productName').innerText;
+		//Add to an array
+		
+		document.getElementById('checkout').innerHTML = "Checkout (" + cartSize + ")" ;
+	}
+	function checkout() {
+		var contents = "";
+		for(i = 0; i < headBandArray.length; i++) {
+			contents += headBandArray[i] + "\n";
+		}
+		var direct = confirm("You are heading to checkout with:\n" + contents );
+		if (direct==true) {
+			window.location.replace("https://www.headbandsofhope.com/");
+			//https://www.headbandsofhope.com/cart
+		} else {
+			alert("wut, buy our headbands yo");
+		}
 	}
 	</script>
 	
