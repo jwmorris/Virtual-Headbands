@@ -10,14 +10,14 @@ html, body {
 
 @font-face {
 	font-family: 'Brazilia';
-	src: url('../../fonts/Brazilia.otf') format('opentype');
+	src: url('Brazilia.otf') format('opentype');
 	font-style: normal;
 	font-weight: 100;
 }
 
 @font-face {
 	font-family: 'Brazilia';
-	src: url('../../fonts/Brazilia.otf') format('opentype');
+	src: url('Brazilia.otf') format('opentype');
 	font-style: normal;
 	font-weight: 300;
 }
@@ -52,7 +52,7 @@ html, body {
     width: 200px;
     text-align: center;
     font-size: 18px;
-	font-family: Brazilia;
+	font-family: 'Brazilia';
 	font-weight: 100;
     padding: 10px;
     border: none;
@@ -67,7 +67,7 @@ html, body {
 }
 
 .updownedit {
-    width: 15%;
+    width: 17.25%;
     position: fixed;
     height: 76%;
     z-index: 1;
@@ -90,8 +90,52 @@ html, body {
 	font-weight: 100;
     margin: 4px 2px;
     cursor: pointer;
-    height: 40%;
+    height: 35%;
 	width: 80%;
+}
+
+.updownedit img {
+	width: 97.5%;
+	height: 17.5%;
+}
+
+
+.slider {
+    -webkit-appearance: none;
+	position: absolute;
+	top: 295px;
+	left: -6.5px;
+    width: 98%;
+    height: 15px;
+	border-radius: 5px;
+    background: rgb(155,155,155);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+	
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+	border-radius: 50%;
+    background: #7ccdc9;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+	border-radius: 50%;
+    background: #7ccdc9;
+    cursor: pointer;
 }
 
 .sidenav {
@@ -162,6 +206,28 @@ html, body {
     transition: 0.3s;
 }
 
+.sidenavbig div {
+	position: absolute;
+	left: 17.5%;
+	width: 65%;
+	
+}
+
+.sidenavbig img {
+	border-radius: 50%;
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+	font-family: Brazilia;
+	font-weight: 100;
+    color: white;
+    height: 15%;
+}
+
+.sidenavbig img:hover {
+	background: rgba(124, 205, 201, 0.5);
+}
+
 .sidenavbig a:hover {
     color: #f1f1f1;
 }
@@ -169,8 +235,9 @@ html, body {
 .sidenavbig .closebtn {
     position: absolute;
     top: 0;
+	color: #7ccdc9;
     right: 25px;
-    font-size: 36px;
+    font-size: 100px;
 	font-family: Brazilia;
 	font-weight: 100;
     margin-left: 50px;
