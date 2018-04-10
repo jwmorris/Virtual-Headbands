@@ -18,7 +18,6 @@ p {
 
 <script src="js/compatibility.js"></script>
 	<script src="js/smoother.js"></script>
-	
 	<script src="../js/objectdetect.js"></script>
 	<script src="../js/objectdetect.frontalface_alt.js"></script>
 	<script>
@@ -61,7 +60,7 @@ p {
 	          	// Prepare the detector once the video dimensions are known:
 	          	if (!detector) {
 		      		var width = ~~(60 * video.videoWidth / video.videoHeight);
-					var height  = 60;
+					var height  =60;
 		      		detector = new objectdetect.detector(width, height, 1.1, objectdetect.frontalface_alt);
 		      	}
           		
@@ -164,13 +163,13 @@ p {
 		// Add a listener to wait for the 'loadedmetadata' state so the video's dimensions can be read
 		video.addEventListener('loadedmetadata', function() {
 			// // Calculate the ratio of the video's width to height
-			ratio = video.videoWidth / video.videoHeight;
+			// ratio = video.videoWidth / video.videoHeight;
 			// // Define the required width as 100 pixels smaller than the actual video's width
-			w = video.videoWidth - 100;
+			// w = video.videoWidth - 100;
 			// // Calculate the height based on the video's width and the ratio
-			h = parseInt(w / ratio, 10);
-			//h = video.videoHeight;
-			//w = video.videoWidth;
+			// h = parseInt(w / ratio, 10);
+			h = video.videoHeight;
+			w = video.videoWidth;
 			// Set the canvas width and height to the values just calculated
 			canvas.width = video.videoWidth;
 			canvas.height = video.videoHeight;			

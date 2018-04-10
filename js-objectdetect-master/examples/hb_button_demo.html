@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="js/compatibility.js"></script>
+	<script src="js/smoother.js"></script>
+	
+	<script src="../js/objectdetect.js"></script>
+	<script src="../js/objectdetect.frontalface.js"></script>
+	<script>
+			// getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
+			if (window.location.protocol == "file:") {
+				alert("You seem to be running this example directly from a file. Note that these examples only work when served from a server or localhost due to canvas cross-domain restrictions.");
+			} else if (window.location.hostname !== "localhost" && window.location.protocol !== "https:"){
+				window.location.protocol = "https";
+			}
+		</script>
+	<script>
+	window.onload = function() {
+	
+		var smoother = new Smoother([0.9999999, 0.9999999, 0.999, 0.999], [0, 0, 0, 0]),
+			video = document.getElementById('video'),
+			headband = document.getElementById('headband'),
+			detector;
+				
+		try {
+			compatibility.getUserMedia({video: true}, function(stream) {
+				try {
+					video.src = compatibility.URL.createObjectURL(stream);
+				} catch (error) {
+					video.src = stream;
+				}
+				compatibility.requestAnimationFrame(play);
+			}, function (error) {
+				alert('WebRTC not available');
+			});
+		} catch (error) {
+			alert(error);
+		}
+		
+		function play() {
+			compatibility.requestAnimationFrame(play);
+			if (video.paused) video.play();
+          	
+			if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0) {
+	          	
+	          	// Prepare the detector once the video dimensions are known:
+	          	if (!detector) {
+		      		var width = ~~(60 * video.videoWidth / video.videoHeight);
+					var height = 60;
+		      		detector = new objectdetect.detector(width, height, 1.1, objectdetect.frontalface);
+		      	}
+          		
+          		// Perform the actual detection:
+				var coords = detector.detect(video, 1);
+				if (coords[0]) {
+					var coord = coords[0];
+					coord = smoother.smooth(coord);
+
+					var windowWidth = window.innerWidth
+					
+					// Rescale coordinates from detector to video coordinate space:
+					coord[0] *= window.innerWidth / detector.canvas.width;
+					coord[1] *= window.innerHeight / detector.canvas.height;
+					coord[2] *= window.innerWidth / detector.canvas.width;
+					coord[3] *= window.innerHeight / detector.canvas.height;
+
+					var boxHeight = coord[3] - coord[1]
+					
+					// Display headband overlay: 
+					headband.style.left    = (coord[0]) + 'px';
+					headband.style.top     = (coord[1]) + 'px';
+					headband.style.width   = (coord[2]) + 'px';
+					headband.style.height  = (coord[3]) + 'px';
+					headband.style.display = "block";
+					
+				} else {
+					headband.style.display = "none";
+				}
+			}
+		}
+		
+		[].slice.call(document.getElementById('list').children).forEach(function(e) {
+			e.addEventListener('click', function() {
+				headband.src = e.src;
+			}, false);
+		});
+	};
+	
+    </script>
+
+
+
+</head>
+<body>
+<video autoplay muted loop id="video" class="vid">
+</video>
+<img id="headband" src="img/flower.png" style="position: absolute; display: none;">
+<div class="sidenav" id="list" align="center">
+		<img src="img/flower.png" style="width: 125px;">
+		<img src="img/Bohemian_Headband.png" style="width: 125px;">
+		<img src="img/Rising_Sun_Headband.png" style="width: 125px;">
+		<img src="img/Fire_Headband.png" style="width: 125px;">
+		<img src="img/414.png" style="width: 125px;">
+		<!--<img src="img/Cat_Ear_Headband.png" style="width: 117px;">
+		<img src="img/Red.png" style="width: 117px;">
+		<img src="img/H.png" style="width: 117px;"> -->
+		<button type="button">More Headbands</button>
+</div>
+
+<!-- Optional: some overlay text to describe the video -->
+<div class="content" align="center">
+  <h1>Headbands of Hope Virtual Closet</h1>
+  <!-- Use a button to pause/play the video with JavaScript -->
+  <button id="Add to Cart" class="bottom_buttons">Add to Cart</button>
+  <button id="take_picture" class="bottom_buttons">Take a picture</button>
+  <button id="checkout" class="bottom_buttons">Checkout</button>
+</div>
+</body>
+</html>
