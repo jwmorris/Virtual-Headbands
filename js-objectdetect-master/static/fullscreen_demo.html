@@ -23,6 +23,15 @@
 				window.location.protocol = "https";
 			}
 		</script>
+		
+		<script>
+			var oldURL = document.referrer;
+			alert(oldURL);
+			//var shopifyHeadband = oldURL.substr(oldURL.lastIndexof('/') + 1);
+			//alert(shopifyHeadband);
+			
+		</script>
+		
 
 	<script>
 	window.onload = function() {
@@ -136,11 +145,11 @@
 		<img src="img/hohLogo.png">
 		
 		<!-- Sliders -->
-		<p>Height:</p>
-		<input type="range" min="1" max="100" value="50" class="slider" id="sliderHeight" style="transform: rotate(90deg); left: -8.5px;">
+		<h1>Height:</h1>
+		<input type="range" min="1" max="100" value="50" class="slider" id="sliderHeight" style="transform: rotate(90deg); left: -3.5%;">
 			
-		<p style="position: absolute; top: 450px; left: 40%">Width:</p>
-		<input type="range" min="1" max="100" value="50" class="slider" style="top: 500px;" id="sliderWidth">
+		<h1 style="position: absolute; top: 74%; left: 32.5%">Width:</h1>
+		<input type="range" min="1" max="100" value="50" class="slider" style="top: 85%;" id="sliderWidth">
 		
 </div>
 
@@ -151,9 +160,6 @@
 		<img src="img/headband_stones.png" alt="Stones Flower" style="width: 125px;">
 		<img src="img/headband_floral.png" alt="Floral Headband" style="width: 125px;">
 		<img src="img/414.png" alt="White Flower" style="width: 125px;">
-		<!--<img src="img/Cat_Ear_Headband.png" style="width: 117px;">
-		<img src="img/Red.png" style="width: 117px;">
-		<img src="img/H.png" style="width: 117px;"> -->
 		<button onclick="openNav()">More Headbands</button>
 </div>
 
