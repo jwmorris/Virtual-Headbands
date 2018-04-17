@@ -10,7 +10,7 @@ dynamodb = boto3.resource('dynamodb')
 
 def create(event, context):
     data = json.loads(event['body'])
-    if 'text' not in data:
+    if 'filePath' not in data:
         logging.error("Validation Failed")
         raise Exception("Couldn't create the headband item.")
         return
@@ -21,13 +21,10 @@ def create(event, context):
 
     item = {
         'id': str(uuid.uuid1()),
-        'text': data['text'],
-        'checked': False,
-        'createdAt': timestamp,
-        'updatedAt': timestamp,
+        'filePath': data['filePath'],
     }
 
-    # write the todo to the database
+    # write the headband to the database
     table.put_item(Item=item)
 
     # create a response

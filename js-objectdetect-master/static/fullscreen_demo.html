@@ -8,6 +8,18 @@
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/axios/dist/axios.standalone.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/rollups/sha256.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/components/hmac.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/components/enc-base64.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/url-template/url-template.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/utils.js"></script>
+<script type="text/javascript" src="js/apiGateway-js-sdk/apigClient.js"></script>
+
 <script src="js/compatibility.js"></script>
 	<script src="js/smoother.js"></script>
 	
@@ -21,6 +33,17 @@
 				window.location.protocol = "https";
 			}
 		</script>
+	<script>
+		var apigClient = apigClientFactory.newClient();
+
+		apigClient.headbandsGet()
+		    .then(function(result){
+		      alert("success");
+		    }).catch( function(result){
+		      alert("fail");
+		    });
+		
+	</script>
 
 	<script>
 	window.onload = function() {
