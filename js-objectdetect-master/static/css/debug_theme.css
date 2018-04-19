@@ -1,0 +1,245 @@
+html, body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100vw;
+	font-family: 'Brazilia';
+	font-weight: 100;
+}
+
+@font-face {
+	font-family: 'Brazilia';
+	src: url('Brazilia.otf') format('opentype');
+	font-style: normal;
+	font-weight: 100;
+}
+
+@font-face {
+	font-family: 'Brazilia';
+	src: url('Brazilia.otf') format('opentype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+.vid {
+	position: absolute;
+    /*height: 100vh;*/
+	display: block;
+    margin: 0 auto;
+	/*z-index: -2;*/
+}
+
+.headband_name {
+	font-family: Brazilia;
+	font-weight: 300;
+}
+
+/* Add some content at the bottom of the video/page */
+.content {
+    position: fixed;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.2);
+    color: #f1f1f1;
+    width: 100%;
+    padding: 20px;
+	height: 16.7%;
+	font-family: 'Brazilia';
+	font-weight: 100;
+}
+
+/* Style the button used to pause/play the video */
+.bottom_buttons {
+    width: 200px;
+    text-align: center;
+    font-size: 18px;
+	font-family: 'Brazilia';
+	font-weight: 100;
+    padding: 10px;
+    border: none;
+    background: #7ccdc9;
+    color: #fff;
+    cursor: pointer;
+}
+
+.bottom_buttons:hover {
+    background: #ddd;
+    color: black;
+}
+
+.updownedit {
+    width: 17.25%;
+    position: fixed;
+    height: 76%;
+    z-index: 1;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.0);
+    overflow-x: hidden;
+    padding: 8px 0;
+}
+.updownedit button {
+    background-color: #7ccdc9;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	font-family: Brazilia;
+	font-weight: 100;
+    margin: 4px 2px;
+    cursor: pointer;
+    height: 35%;
+	width: 80%;
+}
+
+.updownedit img {
+	width: 97.5%;
+	height: 17.5%;
+}
+
+
+.slider {
+    -webkit-appearance: none;
+	position: absolute;
+	top: 50%;
+	left: -2%;
+    width: 98%;
+    height: 15px;
+	border-radius: 5px;
+    background: rgb(155,155,155);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+	
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+	border-radius: 50%;
+    background: #7ccdc9;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+	border-radius: 50%;
+    background: #7ccdc9;
+    cursor: pointer;
+}
+
+.sidenav {
+    width: 15%;
+    position: fixed;
+    height: 76%;
+    z-index: 1;
+    top: 0px;
+    right: 0px;
+    background: rgba(0, 0, 0, 0.0);
+    overflow-x: hidden;
+    padding: 8px 0;
+}
+
+.sidenav img {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+	font-family: Brazilia;
+	font-weight: 100;
+    color: white;
+    display: block;
+    height: 15%;
+}
+
+.sidenav button {
+    background-color: #7ccdc9;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	font-family: Brazilia;
+	font-weight: 100;
+    margin: 4px 2px;
+    cursor: pointer;
+    height: 10%;
+}
+
+.sidenav img:hover {
+    color: #064579;
+}
+
+.sidenavbig {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    /*background-color: #111;*/
+	background: rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenavbig a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+	font-family: Brazilia;
+	font-weight: 100;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenavbig div {
+	position: absolute;
+	left: 17.5%;
+	width: 65%;
+	
+}
+
+.sidenavbig img {
+	border-radius: 50%;
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+	font-family: Brazilia;
+	font-weight: 100;
+    color: white;
+    height: 125px;
+}
+
+.sidenavbig img:hover {
+	background: rgba(124, 205, 201, 0.5);
+}
+
+.sidenavbig a:hover {
+    color: #f1f1f1;
+}
+
+.sidenavbig .closebtn {
+    position: absolute;
+    top: 0;
+	color: #7ccdc9;
+    right: 25px;
+    font-size: 100px;
+	font-family: Brazilia;
+	font-weight: 100;
+    margin-left: 50px;
+}
