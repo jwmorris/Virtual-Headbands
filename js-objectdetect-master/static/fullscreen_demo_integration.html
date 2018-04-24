@@ -2,13 +2,13 @@
 <html>
 <head>
 
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" type="text/css" href="css/theme.css">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
 
 <script src="js/compatibility.js"></script>
 	<script src="js/smoother.js"></script>
@@ -18,7 +18,7 @@
 	<script>
 			// getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
 			if (window.location.protocol == "file:") {
-				alert("You seem to be running this example directly from a file. Note that these examples only work when served from a server or localhost due to canvas cross-domain restrictions.");
+
 			} else if (window.location.hostname !== "localhost" && window.location.protocol !== "https:"){
 				window.location.protocol = "https";
 			}
@@ -31,7 +31,7 @@
 		var heightIncrement = 0;
 		var widthIncrement = 0;
 		var upButton = document.getElementById("up");
-    var downButton = document.getElementById("down");
+		var downButton = document.getElementById("down");
 		var smoother = new Smoother([0.9999999, 0.9999999, 0.999, 0.999], [0, 0, 0, 0]),
 			video = document.getElementById('video'),
 			headband = document.getElementById('headband'),
@@ -108,10 +108,49 @@
 			}
 		}
 		
+		
+	};
+	
+    </script>
+    <script type="text/javascript">
+
+    	/**Headband API request and sidebar population */
+    	var checkoutUrl;
+    	var allHeadbands;
+		$.get("https://lb32nbh5y5.execute-api.us-east-1.amazonaws.com/dev/headbands/", function(data, status){
+        var items = data.length;
+        allHeadbands = data;
+
+       	for(i = 0; i < 5; i++) {
+        	var oImg = document.createElement("img");
+    			oImg.setAttribute('src', data[i].filePath);
+    			oImg.setAttribute('alt', data[i].headbandName);
+				document.getElementById("list").appendChild(oImg);
+		}
+
+		for(i = 0; i < items; i++) {
+        	var oImg = document.createElement("img");
+    			oImg.setAttribute('src', data[i].filePath);
+    			oImg.setAttribute('alt', data[i].headbandName);
+				document.getElementById("overlayList").appendChild(oImg);
+		}
+
+		var moreHbBtn = document.createElement("button");
+		moreHbBtn.setAttribute('onclick', 'openNav()');
+		moreHbBtn.innerText = "More Headbands";
+		document.getElementById("list").appendChild(moreHbBtn);
+
 		[].slice.call(document.getElementById('list').children).forEach(function(e) {
 			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
 					headband.src = e.src;
 					document.getElementById('productName').innerText = e.alt;
+					for(i = 0; i < items; i++) {
+						if(allHeadbands[i].headbandName == e.alt) {
+							checkoutUrl = allHeadbands[i].url;
+							break;
+						}
+					}
+
 			}, false);
 		}});
 		
@@ -119,27 +158,24 @@
 			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
 					headband.src = e.src;
 					document.getElementById('productName').innerText = e.alt;
+					closeNav();
+					for(i = 0; i < items; i++) {
+						if(allHeadbands[i].headbandName == e.alt) {
+							checkoutUrl = allHeadbands[i].url;
+							break;
+						}
+					}
 			}, false);
 		}});
-	};
-	
-    </script>
+    }, "json");
+
+
+
+	</script>
 
 </head>
 <body>
-	<script type="text/javascript">
-		$.get("https://lb32nbh5y5.execute-api.us-east-1.amazonaws.com/dev/headbands/", function(data, status){
-        //alert("Data: " + data[0].headbandName + "\nStatus: " + status);
-        var items = data.length;
-        if(data.length)
-        for(i = 0; i < 5; i++) {
-        	var oImg = document.createElement("img");
-    			oImg.setAttribute('src', data[i].filePath);
-					document.getElementById("list").appendChild(oImg);
-				}
-    }, "json");
 
-	</script>
 	<canvas id="canvas"; visibility: hidden></canvas>
 
 <video autoplay muted loop id="video" class="vid">
@@ -151,25 +187,21 @@
 		<img src="img/hohLogo.png">
 		
 		<!-- Sliders -->
-		<p>Height:</p>
-		<input type="range" min="1" max="100" value="50" class="slider" id="sliderHeight" style="transform: rotate(90deg); left: -3.5%px;">
-			
-		<p style="position: absolute; top: 74%; left: 32.5%">Width:</p>
-		<input type="range" min="1" max="100" value="50" class="slider" style="top: 85%;" id="sliderWidth">
-		
+		<h1>Height:</h1>
+		<div style="height: 27.5%;">
+		<input type="range" min="1" max="100" value="50" class="slider" align="left" id="sliderHeight" style="top: 43%; transform: rotate(90deg); ">
+		</div>	
+		<div>
+		<h1>Width:</h1>
+		</div>
+		<div style="height:27.5%;">
+		<input type="range" min="1" max="100" value="50" class="slider" style="transform: rotate(-90deg); top: 43%;" id="sliderWidth">
+		</div>
 </div>
 
 
 <div class="sidenav" id="list" align="center">
-		<!-- <img src="img/flower.png" alt="Blue Flower" style="width: 125px;">
-		<img src="img/headband_mesh.png" alt="Mesh Headband" style="width: 125px;">
-		<img src="img/headband_stones.png" alt="Stones Flower" style="width: 125px;">
-		<img src="img/headband_floral.png" alt="Floral Headband" style="width: 125px;">
-		<img src="img/414.png" alt="White Flower" style="width: 125px;">
-		<img src="img/Cat_Ear_Headband.png" style="width: 117px;">
-		<img src="img/Red.png" style="width: 117px;">
-		<img src="img/H.png" style="width: 117px;">
-		<button onclick="openNav()">More Headbands</button> -->
+		<!-- <button onclick="openNav()">More Headbands</button>  -->
 </div> 
 
 <div id="sidenavbig" class="sidenavbig">
@@ -197,13 +229,13 @@
 <!-- Optional: some overlay text to describe the video -->
 <div class="content" align="center">
   <!-- <h1>Headbands of Hope Virtual Closet</h1> -->
-  <h1 id = productName> Product Name </h1>
+  <h1 id = productName style = "left: 0;"> Product Name </h1>
   <!-- Use a button to pause/play the video with JavaScript -->
-  <button id="Add to Cart"  class="bottom_buttons" onclick="addToCart()">Add to Cart</button>
-  <button id="take_picture" class="bottom_buttons" onclick="snap()">Take a picture</button>
-  <button id="checkout" class="bottom_buttons" onclick="checkout()">Checkout</button>
-<a href='new.html'>link text</a>
-
+  <div style= "position: absolute; left: 0; top: 55%; width: 100%; height: 35%;">
+	<!--<button id="Add to Cart"  class="bottom_buttons" onclick="addToCart()">Add to Cart</button>-->
+	<button id="take_picture" class="bottom_buttons" onclick="snap()">Take a picture</button>
+	<button id="checkout" class="bottom_buttons" onclick="checkout()">Product Page</button>
+  </div>
 </div>
 <script>
 		// Get handles on the video and canvas elements
@@ -264,8 +296,9 @@
 			contents += headBandArray[i] + "\n";
 		}
 		var direct = confirm("You are heading to checkout with:\n" + contents );
+
 		if (direct==true) {
-			window.location.replace("https://www.headbandsofhope.com/");
+			window.location.replace(checkoutUrl);
 			//https://www.headbandsofhope.com/cart
 		} else {
 			alert("wut, buy our headbands yo");
