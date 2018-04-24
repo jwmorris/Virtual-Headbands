@@ -27,7 +27,7 @@ html, body {
     /*height: 100vh;*/
 	display: block;
     margin: 0 auto;
-	/*z-index: -2;*/
+	z-index: 0;
 }
 
 .headband_name {

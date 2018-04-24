@@ -2,20 +2,18 @@
 <html lang="en">
 <head>
 
-<meta name="apple-mobile-web-app-capable" content="yes" charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="css/theme.css">
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<meta name="apple-mobile-web-app-capable" content="yes" charset="UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/debug_theme.css">
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//webrtc.github.io/adapter/adapter-latest.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width" />
 
 
 
 <style type="text/css">
 	#test {
-		/*border: 1px solid cyan;*/
-		z-index: -1;
+		/*border: 2px solid cyan;*/
+		z-index: 2;
 		position: absolute;
 	}
 </style>
@@ -26,6 +24,7 @@
 	<script src="video.js"></script>
 	<script src="../js/objectdetect.js"></script>
 	<script src="../js/objectdetect.frontalface_alt.js"></script>
+	<script src="../js/objectdetect.mouth.js"></script>
 	<script>
 			// getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
 			if (window.location.protocol == "file:") {
@@ -36,11 +35,12 @@
 		</script>
 		
 		<script>
+		/*
 			var oldURL = document.referrer;
 			alert(oldURL);
 			//var shopifyHeadband = oldURL.substr(oldURL.lastIndexof('/') + 1);
 			//alert(shopifyHeadband);
-			
+			*/
 		</script>
 		
 
@@ -53,7 +53,10 @@
 			test = document.getElementById('test'),
 			testContext = test.getContext('2d'),
 			headband = document.getElementById('headband'),
-			detector;
+			detector,
+			detector1,
+			detector2,
+			detector3;
 			document.getElementById('productName').innerText = headband.alt;
 				
 		try {
@@ -75,30 +78,68 @@
 			compatibility.requestAnimationFrame(play);
 			if (video.paused) video.play();
 			
-			//fitVideo();
-			////fitCanavs();
+			fitVideo();
+			fitCanvas();
+			var testContext = test.getContext('2d');
+			testContext.clearRect(0, 0, test.width, test.height);
+			testContext.drawImage(logo, 0, 0, test.width/3, ((test.width/3)*173/560));
           	//testContext.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, ((test.width - (video.videoHeight/video.videoWidth)*test.width)/2), 0, (video.videoHeight/video.videoWidth)*test.width, test.height);
 			if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0) {
 	          	
 	          	// Prepare the detector once the video dimensions are known:
 	          	if (!detector) {
-		      		var width = ~~(60 * video.offsetWidth / video.offsetHeight);
-							var height = 60;
+		      		var width = ~~(80 * test.width / test.height);
+					var height = 80;
+					//var width = ~~(60 * test.width / test.height);
+					//var height = 60;
+					console.log("DETECTOR WIDTH: " + width + ", HEIGHT: " + height);
+					//var width = test.width;
+					//var height = test.height;
 		      		detector = new objectdetect.detector(width, height, 1.1, objectdetect.frontalface_alt);
 		      	}
           		
           		// Perform the actual detection:
-				var coords = detector.detect(video, 1);
+				var left = parseInt(test.style.left);
+				var top = parseInt(test.style.top);
+				var roi =  [ left, top, test.width, test.height ];
+				console.log("LEFT: " + left + ", TOP: " + top + ", WIDTH: " + test.width + ", HEIGHT: " + test.height);
+				//var coords = detector.detect(video, 1, 2, roi);
+				var coords = detector.detect(video, 1, 1);
 				if (coords[0]) {
 					var coord = coords[0];
 					coord = smoother.smooth(coord);
-					var windowWidth = window.innerWidth
+					//var windowWidth = window.innerWidth
 					
 					// Rescale coordinates from detector to video coordinate space:
+					//var testContext = test.getContext('2d');
+					
+					/*
+					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
 					coord[0] *= video.offsetWidth / detector.canvas.width;
 					coord[1] *= video.offsetHeight / detector.canvas.height;
 					coord[2] *= video.offsetWidth / detector.canvas.width;
 					coord[3] *= video.offsetHeight / detector.canvas.height;
+					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
+					
+					*/
+					
+					//testContext.drawImage(logo, 0, 0, this.width, this.height);
+					
+					testContext.strokeRect(0, 0, detector.canvas.width, detector.canvas.height);
+					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
+					
+					coord[0] *= test.width / detector.canvas.width;
+					coord[1] *= test.height / detector.canvas.height;
+					coord[2] *= test.width / detector.canvas.width;
+					coord[3] *= test.height / detector.canvas.height;
+					
+					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
+					testContext.drawImage(headband, coord[0], coord[1]  - (.5 * coord[3]), coord[2], coord[3]);
+					
+					//coord[0] = coord[0] * ( test.width / detector.canvas.width ) + left;
+					//coord[1] = coord[1] * ( test.height / detector.canvas.height ) + top;
+					//coord[2] *= video.offsetWidth / detector.canvas.width;
+					//coord[3] *= video.offsetHeight / detector.canvas.height;
 					
 					//upButton.onclick = function(){
 					//	if(increment + coord[1] > 0) {	
@@ -117,13 +158,41 @@
 					//widthIncrement = widthIncrement - 50;
 					
 					// Display headband overlay: 
+					/*
 					headband.style.left    = (coord[0] + (windowWidth - video.offsetWidth)/2) - widthIncrement + 'px';
 					headband.style.top     = (coord[1] - (detector.canvas.height*2)) + heightIncrement * (1.5) + 'px';
 					headband.style.width   = (coord[2] *.9) + widthIncrement * (1.5) + 'px';
 					headband.style.height  = (coord[3] *.9) + 'px';
 					headband.style.display = "block";
+					*/
+					// that new new
+					/*
+					headband.style.left    = `${coord[0] + left}px`;
+					headband.style.top     = `${coord[1]*.2 + top}px`;
+					headband.style.width   = `${coord[2]}px`;
+					headband.style.height  = `${coord[3]}px`;
+					headband.style.display = "block";
+					*/
+					/*
+					if(!detector1) {
+						//create detector for mouth
+						var detector1width = ~~(80 * coord[2] / coord[3]); //scale down
+						var detector1height = 80/2;
+						detector1 = new objectdetect.detector(detector1width, detector1height, 1.1, objectdetect.mouth);
+					}
 					
-					
+					var detector1OffsetLeft = coord[0];
+					var detector1OffsetTop = coord[1];
+					var roi1 = [ coord[0], ( coord[1] + coord[3]/2), coord[2], coord[3] ]; 
+					var coords1 = detector1.detect(video, 1, 1, roi1);
+					if(coords1[0]) {
+						var coord1 = coords1[0];
+						coord1 = smoother.smooth(coord1);
+						testContext.strokeRect(coord1[0], coord1[1], coord1[2], coord1[3])
+					} else {
+						//headband.style.display = "none";
+					}
+					*/
 				} else {
 					headband.style.display = "none";
 				}
@@ -188,6 +257,7 @@
 		*/
 			fitVideo();
 			fitCanvas();
+			detector = null;
 		}
 	};
 	
@@ -197,7 +267,7 @@
 </head>
 <body>
 <canvas id="canvas"; visibility: hidden></canvas>
-<video autoplay muted loop id="video" class="vid"; visibility: hidden></video>
+<video  muted autoplay playsinline id="video" class="vid"></video>
 <canvas id="test" class="vid"></canvas>
 <script>
 	fitVideo();
@@ -207,8 +277,8 @@
 
 <!--<div class="updownedit" align="center">-->
 		<!--<h1 style="color:#7ccdc9;">Edit Position</h1>-->
-		<img src="img/hohLogo.png" top=0 left=0>
-		
+		<!--<img src="img/hohLogo.png" id="logo" top=0 left=0>-->
+		<img src="img/hohLogo.png" id="logo" style="display: none;">
 <!--</div>-->
 
 <script>
