@@ -2,13 +2,13 @@
 <html>
 <head>
 
-<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" type="text/css" href="css/theme.css">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 
 <script src="js/compatibility.js"></script>
 	<script src="js/smoother.js"></script>
@@ -31,7 +31,7 @@
 		var heightIncrement = 0;
 		var widthIncrement = 0;
 		var upButton = document.getElementById("up");
-		var downButton = document.getElementById("down");
+    var downButton = document.getElementById("down");
 		var smoother = new Smoother([0.9999999, 0.9999999, 0.999, 0.999], [0, 0, 0, 0]),
 			video = document.getElementById('video'),
 			headband = document.getElementById('headband'),
@@ -158,7 +158,6 @@
 			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
 					headband.src = e.src;
 					document.getElementById('productName').innerText = e.alt;
-					closeNav();
 					for(i = 0; i < items; i++) {
 						if(allHeadbands[i].headbandName == e.alt) {
 							checkoutUrl = allHeadbands[i].url;
@@ -187,16 +186,12 @@
 		<img src="img/hohLogo.png">
 		
 		<!-- Sliders -->
-		<h1>Height:</h1>
-		<div style="height: 27.5%;">
-		<input type="range" min="1" max="100" value="50" class="slider" align="left" id="sliderHeight" style="top: 43%; transform: rotate(90deg); ">
-		</div>	
-		<div>
-		<h1>Width:</h1>
-		</div>
-		<div style="height:27.5%;">
-		<input type="range" min="1" max="100" value="50" class="slider" style="transform: rotate(-90deg); top: 43%;" id="sliderWidth">
-		</div>
+		<p>Height:</p>
+		<input type="range" min="1" max="100" value="50" class="slider" id="sliderHeight" style="transform: rotate(90deg); left: -3.5%px;">
+			
+		<p style="position: absolute; top: 74%; left: 32.5%">Width:</p>
+		<input type="range" min="1" max="100" value="50" class="slider" style="top: 85%;" id="sliderWidth">
+		
 </div>
 
 
@@ -229,13 +224,12 @@
 <!-- Optional: some overlay text to describe the video -->
 <div class="content" align="center">
   <!-- <h1>Headbands of Hope Virtual Closet</h1> -->
-  <h1 id = productName style = "left: 0;"> Product Name </h1>
+  <h1 id = productName> Product Name </h1>
   <!-- Use a button to pause/play the video with JavaScript -->
-  <div style= "position: absolute; left: 0; top: 55%; width: 100%; height: 35%;">
-	<!--<button id="Add to Cart"  class="bottom_buttons" onclick="addToCart()">Add to Cart</button>-->
-	<button id="take_picture" class="bottom_buttons" onclick="snap()">Take a picture</button>
-	<button id="checkout" class="bottom_buttons" onclick="checkout()">Product Page</button>
-  </div>
+  <button id="Add to Cart"  class="bottom_buttons" onclick="addToCart()">Add to Cart</button>
+  <button id="take_picture" class="bottom_buttons" onclick="snap()">Take a picture</button>
+  <button id="checkout" class="bottom_buttons" onclick="checkout()">Checkout</button>
+
 </div>
 <script>
 		// Get handles on the video and canvas elements
