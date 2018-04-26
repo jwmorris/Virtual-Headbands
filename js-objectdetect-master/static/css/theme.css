@@ -23,9 +23,9 @@ html, body {
 }
 
 .vid {
-    /*position: fixed;*/
+	/*position: fixed;*/
     height: 100vh;
-    display: block;
+	display: block;
     margin: 0 auto;
 }
 
