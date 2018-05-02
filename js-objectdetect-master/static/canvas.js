@@ -1,15 +1,7 @@
 function fitCanvas() {
 	var canvas = document.getElementById('test');
 	var video = document.getElementById('video');
-	/*if(video.height > video.width
-	canvas.width = video.videoWidth;
-	canvas.height = video.videoHeight;
-	canvas.left = (video.width - video.videoWidth)/2;
-	canvas.top = (video.height - video.videoHeight)/2;
-	*/
-	//canvas.width = video.offsetWidth;
-	//console.log("canvas: " + video.videoWidth + " x " + video.videoHeight);
-	//canvas.height = video.offsetHeight;
+
 	var aspectRatio = video.videoHeight/video.videoWidth;
 	var top = 0;
 	var left = 0;
