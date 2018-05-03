@@ -70,8 +70,8 @@
 	          	
 	          	// Prepare the detector once the video dimensions are known:
 	          	if (!detector) {
-		      		var width = ~~(80 * video.offsetWidth / video.offsetHeight);
-					var height = 80;
+		      		var width = ~~(60 * video.offsetWidth / video.offsetHeight);
+					var height = 60;
 		      		detector = new objectdetect.detector(width, height, 1.1, objectdetect.frontalface_alt);
 		      	}
           		
@@ -93,7 +93,7 @@
 					coord[1] *= video.offsetHeight / detector.canvas.height;
 					coord[2] *= video.offsetWidth / detector.canvas.width;
 					coord[3] *= video.offsetHeight / detector.canvas.height;
-					
+					*/
 					heightIncrement = document.getElementById('sliderHeight').value;
 					heightIncrement = heightIncrement - 50;
 					
@@ -101,13 +101,13 @@
 					widthIncrement = widthIncrement - 50;
 					
 					// Display headband overlay: 
+					/*
 					headband.style.left    = (coord[0] + (windowWidth - video.offsetWidth)/2) - widthIncrement + 'px';
 					headband.style.top     = (coord[1] - (detector.canvas.height*2)) + heightIncrement * (1.5) + 'px';
 					headband.style.width   = (coord[2] *.9) + widthIncrement * (1.5) + 'px';
 					headband.style.height  = (coord[3] *.9) + 'px';
 					headband.style.display = "block";
 					*/
-					
 					//Debugging code below:  - Jack
 					/*
 					testContext.strokeRect(0, 0, detector.canvas.width, detector.canvas.height);
@@ -120,12 +120,13 @@
 					coord[3] *= test.height / detector.canvas.height;
 					
 					//Debugging code below:   - Jack
-					/*
-					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
-					*/ //End debugging code
+				
+					//testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
+					
+					//End debugging code
 					
 					//Display headband overlay  - Jack
-					testContext.drawImage(headband, coord[0], coord[1]  - (.5 * coord[3]), coord[2], coord[3]);
+					testContext.drawImage(headband, coord[0], (coord[1]  - (.5 * coord[3]) + heightIncrement), (coord[2] + widthIncrement), coord[3]);
 					
 				} else {
 					headband.style.display = "none";
