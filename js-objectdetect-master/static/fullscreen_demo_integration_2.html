@@ -126,7 +126,7 @@
 					//End debugging code
 					
 					//Display headband overlay  - Jack
-					testContext.drawImage(headband, coord[0], (coord[1]  - (.5 * coord[3]) + heightIncrement), (coord[2] + widthIncrement), coord[3]);
+					testContext.drawImage(headband, (coord[0] - .5 * widthIncrement), (coord[1]  - (.5 * coord[3]) + heightIncrement), (coord[2] + widthIncrement), coord[3]);
 					
 				} else {
 					headband.style.display = "none";
