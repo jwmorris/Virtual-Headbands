@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta name="apple-mobile-web-app-capable" content="yes" charset="UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="js/compatibility.js"></script>
+	<script src="js/smoother.js"></script>
+	<script src="canvas.js"></script>
+	<script src="video.js"></script>
+	<script src="../js/objectdetect.js"></script>
+	<script src="../js/objectdetect.frontalface_alt.js"></script>
+	<script src="../js/objectdetect.mouth.js"></script>
+	<script>
+			// getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
+			if (window.location.protocol == "file:") {
+
+			} else if (window.location.hostname !== "localhost" && window.location.protocol !== "https:"){
+				window.location.protocol = "https";
+			}
+		</script>	
+		
+
+	<script>
+	window.onload = function() {
+		var heightIncrement = 0;
+		var widthIncrement = 0;
+		var upButton = document.getElementById("up");
+		var downButton = document.getElementById("down");
+		var smoother = new Smoother([0.9999999, 0.9999999, 0.999, 0.999], [0, 0, 0, 0]),
+			video = document.getElementById('video'),
+			test = document.getElementById('test'),
+			testContext = test.getContext('2d'),
+			headband = document.getElementById('headband'),
+			detector;
+			document.getElementById('productName').innerText = headband.alt;
+				
+		try {
+			compatibility.getUserMedia({video: true}, function(stream) {
+				try {
+					video.src = compatibility.URL.createObjectURL(stream);
+				} catch (error) {
+					video.src = stream;
+				}
+				compatibility.requestAnimationFrame(play);
+			}, function (error) {
+				alert('WebRTC not available');
+			});
+		} catch (error) {
+			alert(error);
+		}
+		
+		function play() {
+			compatibility.requestAnimationFrame(play);
+			if (video.paused) video.play();
+			
+          	//procedurally scale video and video display canvas
+			fitVideo();
+			fitCanvas();
+			testContext.clearRect(0, 0, test.width, test.height);
+			//testContext.drawImage(logo, 0, 0, test.width/3, ((test.width/3)*173/560)); //Jess didn't want logo on video
+			
+			if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0) {
+	          	
+	          	// Prepare the detector once the video dimensions are known:
+	          	if (!detector) {
+		      		var width = ~~(80 * video.offsetWidth / video.offsetHeight);
+					var height = 80;
+		      		detector = new objectdetect.detector(width, height, 1.1, objectdetect.frontalface_alt);
+		      	}
+          		
+          		// Perform the actual detection:
+				var left = parseInt(test.style.left);
+				var top = parseInt(test.style.top);
+				var roi = [ left, top, test.width, test.height ];
+				//console.log("LEFT: " + left + ", TOP: " + top + ", WIDTH: " + test.width + ", HEIGHT: " + test.height);
+				//var coords = detector.detect(video, 1, 2, roi);
+				var coords = detector.detect(video, 1, 1);
+				if (coords[0]) {
+					var coord = coords[0];
+					coord = smoother.smooth(coord);
+					//var windowWidth = window.innerWidth
+					
+					// Rescale coordinates from detector to video coordinate space: //Antiquated code below:
+					/*
+					coord[0] *= video.offsetWidth / detector.canvas.width;
+					coord[1] *= video.offsetHeight / detector.canvas.height;
+					coord[2] *= video.offsetWidth / detector.canvas.width;
+					coord[3] *= video.offsetHeight / detector.canvas.height;
+					
+					heightIncrement = document.getElementById('sliderHeight').value;
+					heightIncrement = heightIncrement - 50;
+					
+					widthIncrement = document.getElementById('sliderWidth').value;
+					widthIncrement = widthIncrement - 50;
+					
+					// Display headband overlay: 
+					headband.style.left    = (coord[0] + (windowWidth - video.offsetWidth)/2) - widthIncrement + 'px';
+					headband.style.top     = (coord[1] - (detector.canvas.height*2)) + heightIncrement * (1.5) + 'px';
+					headband.style.width   = (coord[2] *.9) + widthIncrement * (1.5) + 'px';
+					headband.style.height  = (coord[3] *.9) + 'px';
+					headband.style.display = "block";
+					*/
+					
+					//Debugging code below:  - Jack
+					/*
+					testContext.strokeRect(0, 0, detector.canvas.width, detector.canvas.height);
+					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
+					*/  //End Debugging code
+					
+					coord[0] *= test.width / detector.canvas.width;
+					coord[1] *= test.height / detector.canvas.height;
+					coord[2] *= test.width / detector.canvas.width;
+					coord[3] *= test.height / detector.canvas.height;
+					
+					//Debugging code below:   - Jack
+					/*
+					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
+					*/ //End debugging code
+					
+					//Display headband overlay  - Jack
+					testContext.drawImage(headband, coord[0], coord[1]  - (.5 * coord[3]), coord[2], coord[3]);
+					
+				} else {
+					headband.style.display = "none";
+				}
+			}
+		}
+		
+		window.addEventListener("resize", resizeVideo, false);
+			var width = window.innerWidth;
+			console.log("width: " + width);
+			var height = window.innerHeight;
+			/*var aspRatio = video.videoHeight/video.videoWidth;*/
+			//console.log("video aspect ratio: " + aspRatio);
+			console.log("video width: " + video.videoWidth);
+			console.log("video height: " + video.videoHeight);
+			console.log("height: " + height);
+			//video.height = height;
+			//video.width = width;
+			//if(height > width) {
+			//	video.width = width;
+			//} else {
+			//	video.height = height;
+			//}
+		console.log("video height: " + video.offsetHeight);
+		console.log("video width: " + video.offsetWidth);
+		function resizeVideo() {
+		/*
+			width = window.innerWidth;
+			console.log("width: " + width);
+			height = window.innerHeight;
+			console.log("height: " + height);
+			if(height > width) {
+				video.width = width;
+				video.height =
+			} else {
+			
+				video.height = height;
+				video.left = (width - video.offsetWidth)/2;
+			}
+
+			test.left = video.left;
+			test.height = video.offsetHeight;
+			test.width = video.offsetWidth;
+			test.top = video.top;
+			
+			test.bottom = video.bottom;
+		*/
+			fitVideo();
+			fitCanvas();
+			detector = null;
+		}		
+	};
+	
+    </script>
+    <script type="text/javascript">
+
+    	/**Headband API request and sidebar population */
+		var startingHeadband;
+    	var checkoutUrl;
+    	var allHeadbands;
+		$.get("https://lb32nbh5y5.execute-api.us-east-1.amazonaws.com/dev/headbands/", function(data, status){
+        var items = data.length;
+        allHeadbands = data;
+		
+		var currentURL = window.location.href;
+		var i;
+		var lastQuestion = 0;
+		for (i = 0; i < currentURL.length; i++) {
+		  if (currentURL.charAt(i) == '=') {
+			lastQuestion = i;
+		  }
+		} 
+		var startingHeadband = currentURL.substring(lastQuestion + 1);
+
+       	for(i = 0; i < 5; i++) {
+        	var oImg = document.createElement("img");
+    			oImg.setAttribute('src', data[i].filePath);
+    			oImg.setAttribute('alt', data[i].displayName);
+				document.getElementById("list").appendChild(oImg);
+		}
+
+		for(i = 0; i < items; i++) {
+        	var oImg = document.createElement("img");
+    			oImg.setAttribute('src', data[i].filePath);
+    			oImg.setAttribute('alt', data[i].displayName);
+				document.getElementById("overlayList").appendChild(oImg);
+				
+				if(data[i].headbandName == startingHeadband) {
+					var prodName = document.getElementById('productName');
+					//prodName.addEventListener('load', function() {
+						headband.src = data[i].filePath;
+						prodName.innerText = data[i].displayName;
+					//}
+				}
+				
+		}
+
+		var moreHbBtn = document.createElement("button");
+		moreHbBtn.setAttribute('onclick', 'openNav()');
+		moreHbBtn.innerText = "More Headbands";
+		document.getElementById("list").appendChild(moreHbBtn);
+
+		[].slice.call(document.getElementById('list').children).forEach(function(e) {
+			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
+					headband.src = e.src;
+					document.getElementById('productName').innerText = e.alt;
+					for(i = 0; i < items; i++) {
+						if(allHeadbands[i].displayName == e.alt) {
+							checkoutUrl = allHeadbands[i].url;
+							break;
+						}
+					}
+
+			}, false);
+		}});
+		
+		[].slice.call(document.getElementById('overlayList').children).forEach(function(e) {
+			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
+					headband.src = e.src;
+					document.getElementById('productName').innerText = e.alt;
+					closeNav();
+					for(i = 0; i < items; i++) {
+						if(allHeadbands[i].displayName == e.alt) {
+							checkoutUrl = allHeadbands[i].url;
+							break;
+						}
+					}
+			}, false);
+		}});
+    }, "json");
+
+
+
+	</script>
+
+</head>
+<body>
+	<canvas id="canvas"; visibility: hidden></canvas>
+<video autoplay muted loop id="video" class="vid"></video>
+<canvas id="test" class="vid"></canvas>
+<script>
+	fitVideo();
+	fitCanvas();
+</script>
+<img id="headband" src="img/flower.png" alt="Test Headband" style="position: absolute; display: none;">
+
+
+<div id= "sliderSideBar" class="updownedit" align="center">
+		
+		
+		<img id="logo" src="img/Virtual Closet Logo-02.png">
+		<script>
+		//Mobile Check //P.S. this might mess with my added code  - Jack
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+		  document.getElementById('sliderSideBar').removeChild(document.getElementById('logo'));
+		  //document.getElementById('sliderSideBar')
+		}
+		 
+		</script>
+		
+		<!-- Sliders -->
+		<p id = heightName style= "position: relative; font-size:200%; width: 50%; color: white; text-shadow: 2px 2px 4px #000000;">Height:</p>
+		<div style="height: 27.5%;">
+		<input type="range" min="1" max="100" value="50" class="slider" align="left" id="sliderHeight" style="top: 43%; transform: rotate(90deg); ">
+		</div>	
+		<div>
+		<p id = widthName style="position: relative; font-size: 200%; width: 50%; color: white; text-shadow: 2px 2px 4px #000000;">Width:</p>
+		</div>
+		<div style="height:27.5%;">
+		<input type="range" min="1" max="100" value="50" class="slider" style="transform: rotate(-90deg); top: 43%;" id="sliderWidth">
+		</div>
+</div>
+
+
+<div class="sidenav" id="list" align="center">
+		<!-- <button onclick="openNav()">More Headbands</button>  -->
+</div> 
+
+<div id="sidenavbig" class="sidenavbig">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+		<div id="overlayList" class="overlayList" align="center">
+			<h1 style="color:white;"> Additional Headbands</h1>
+			<!--<img src="img/flower.png" alt="Blue Flower" style="width: 125px;">
+			<img src="img/headband_mesh.png" alt="Mesh Headband" style="width: 125px;">
+			<img src="img/headband_stones.png" alt="Stones Flower" style="width: 125px;">
+			<img src="img/headband_floral.png" alt="Floral Headband" style="width: 125px;">
+			<img src="img/414.png" alt="White Flower" style="width: 125px;">
+			<img src="img/Bohemian_Headband.png" style="width: 125px;">
+			<img src="img/Cat_Ear_Headband.png" style="width: 125px;">
+			<img src="img/Fire_Headband.png" style="width: 125px;">
+			<img src="img/H.png" style="width: 125px;">
+			<img src="img/Rising_Sun_Headband.png" style="width: 125px;">
+			<img src="img/Red.png" style="width: 125px;">
+			<img src="img/414.png" alt="White Flower" style="width: 125px;">-->
+		</div>
+</div>
+
+<img id="logo" src="img/HOH_logo.png" visibility: hidden>
+
+<!-- Optional: some overlay text to describe the video -->
+<div class="content" align="center">
+  <!-- <h1>Headbands of Hope Virtual Closet</h1> -->
+ 
+  <p id = productName style= "position: relative; bottom: 20%; font-size: 300%; text-shadow: 2px 2px 4px #000000;"> </p>
+
+  <!-- Use a button to pause/play the video with JavaScript -->
+  <div style= "position: absolute; left: 0; top: 55%; width: 100%; height: 35%;">
+  
+	<!--<button id="Add to Cart"  class="bottom_buttons" onclick="addToCart()">Add to Cart</button>-->
+	<button id="take_picture" class="bottom_buttons" onclick="snap()">Take a picture</button>
+	<button id="checkout" class="bottom_buttons" onclick="checkout()">Product Page</button>
+  </div>
+</div>
+<script src="canvas.js"></script>
+<script>
+		// This does not work with current display implementation  - Jack
+		// Get handles on the video and canvas elements
+		var hb = document.getElementById('headband');
+		var video = document.getElementById('video');
+		var canvas = document.getElementById('canvas');
+		var logo = document.getElementById('logo');
+		// Get a handle on the 2d context of the canvas element
+		var context = canvas.getContext('2d');
+		// Define some vars required later
+		var w, h, ratio;
+		// Add a listener to wait for the 'loadedmetadata' state so the video's dimensions can be read
+		video.addEventListener('loadedmetadata', function() {
+			h = video.offsetHeight;
+			w = video.offsetWidth;			
+			// Set the canvas width and height to video size
+			canvas.width = w;
+			canvas.height = h;	
+		}, false);
+		
+		// Takes a snapshot of the video
+		function snap() {
+			// Draw screenshot, headband, and HOH logo on canvas
+			context.drawImage(video, 0, 0, w, h);
+			context.drawImage(hb, (hb.offsetLeft - (window.innerWidth - w)/2), hb.offsetTop, hb.width, hb.height);
+			context.drawImage(logo, 0, 0, 200, 200);
+			//Open new tab and draw image on it
+    	var win=window.open();
+    	win.document.body.innerHTML = "'<img src="+canvas.toDataURL("image/png")+">'";
+		}
+		 
+	</script>
+	
+	<script>
+	function openNav() {	
+		document.getElementById("sidenavbig").style.width = "100%";
+	}
+
+	function closeNav() {
+		document.getElementById("sidenavbig").style.width = "0";
+	}
+	</script>
+	
+	<script>
+	var cartSize = 0;
+	var headBandArray = [];
+	function addToCart() {
+		
+		cartSize = cartSize + 1;
+		headBandArray[headBandArray.length] = document.getElementById('productName').innerText;
+		//Add to an array
+		
+		document.getElementById('checkout').innerHTML = "Checkout (" + cartSize + ")" ;
+	}
+	function checkout() {
+		//var contents = "";
+		//for(i = 0; i < headBandArray.length; i++) {
+		//	contents += headBandArray[i] + "\n";
+		//}
+		//var direct = confirm("You are heading to checkout with:\n" + contents );
+
+		//if (direct==true) {
+			window.location.replace(checkoutUrl);
+			//https://www.headbandsofhope.com/cart
+		//} else {
+		//	alert("wut, buy our headbands yo");
+		//}
+	}
+	</script>
+	
+</body>
+</html>

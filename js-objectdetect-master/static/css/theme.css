@@ -24,12 +24,21 @@ html, body {
 	font-weight: 300;
 }
 
-.vid {
-    /*position: fixed;*/
+/*.vid {
+    //position: fixed;
     height: 100vh;
 	
     display: block;
     margin: 0 auto;
+}
+*/
+
+.vid {
+	position: absolute;
+    /*height: 100vh;*/
+	display: block;
+    margin: 0 auto;
+	z-index: 0;
 }
 
 .headband_name {
@@ -259,4 +268,10 @@ html, body {
 	font-family: Brazilia;
 	font-weight: 100;
     margin-left: 50px;
+}
+
+#test {
+		/*border: 2px solid cyan;*/
+		z-index: 2;
+		position: absolute;
 }
