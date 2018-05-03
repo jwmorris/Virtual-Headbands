@@ -92,7 +92,7 @@
 					var height = 80;
 					//var width = ~~(60 * test.width / test.height);
 					//var height = 60;
-					console.log("DETECTOR WIDTH: " + width + ", HEIGHT: " + height);
+					//console.log("DETECTOR WIDTH: " + width + ", HEIGHT: " + height);
 					//var width = test.width;
 					//var height = test.height;
 		      		detector = new objectdetect.detector(width, height, 1.1, objectdetect.frontalface_alt);
@@ -126,7 +126,7 @@
 					//testContext.drawImage(logo, 0, 0, this.width, this.height);
 					
 					testContext.strokeRect(0, 0, detector.canvas.width, detector.canvas.height);
-					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
+					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3]);
 					
 					coord[0] *= test.width / detector.canvas.width;
 					coord[1] *= test.height / detector.canvas.height;

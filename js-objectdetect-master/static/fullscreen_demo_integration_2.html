@@ -7,7 +7,8 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="//webrtc.github.io/adapter/adapter-latest.js"></script>
+<meta name="viewport" content="width=device-width" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script src="js/compatibility.js"></script>
@@ -64,14 +65,17 @@
 			fitVideo();
 			fitCanvas();
 			testContext.clearRect(0, 0, test.width, test.height);
+			
+			//Debugging  draw functions  -Jack
+			testContext.clearRect(0, 0, test.width, test.height);
 			//testContext.drawImage(logo, 0, 0, test.width/3, ((test.width/3)*173/560)); //Jess didn't want logo on video
 			
 			if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0) {
 	          	
 	          	// Prepare the detector once the video dimensions are known:
 	          	if (!detector) {
-		      		var width = ~~(60 * video.offsetWidth / video.offsetHeight);
-					var height = 60;
+		      		var width = ~~(80 * test.width / test.height);
+					var height = 80;
 		      		detector = new objectdetect.detector(width, height, 1.1, objectdetect.frontalface_alt);
 		      	}
           		
@@ -109,10 +113,11 @@
 					headband.style.display = "block";
 					*/
 					//Debugging code below:  - Jack
-					/*
+
 					testContext.strokeRect(0, 0, detector.canvas.width, detector.canvas.height);
 					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
-					*/  //End Debugging code
+
+					//End Debugging code
 					
 					coord[0] *= test.width / detector.canvas.width;
 					coord[1] *= test.height / detector.canvas.height;
@@ -126,6 +131,9 @@
 					//End debugging code
 					
 					//Display headband overlay  - Jack
+					
+					testContext.strokeRect((coord[0] - .5 * widthIncrement), (coord[1]  - (.5 * coord[3]) + heightIncrement), (coord[2] + widthIncrement), coord[3]);
+					testContext.strokeRect(coord[0], coord[1], coord[2], coord[3]);
 					testContext.drawImage(headband, (coord[0] - .5 * widthIncrement), (coord[1]  - (.5 * coord[3]) + heightIncrement), (coord[2] + widthIncrement), coord[3]);
 					
 				} else {
