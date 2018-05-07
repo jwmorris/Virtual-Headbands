@@ -1,3 +1,18 @@
+//setup variables
+var width = window.innerWidth;
+var height = window.innerHeight;
+var heightIncrement = 0;
+var widthIncrement = 0;
+var upButton;
+var downButton;
+
+var smoother = new Smoother([0.9999999, 0.9999999, 0.999, 0.999], [0, 0, 0, 0]),
+		video,
+		test,
+		testContext,
+		headband,
+		detector;
+
 window.onload = function() {
 
 	// getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
@@ -11,8 +26,8 @@ window.onload = function() {
 	//getDatabaseContent(); //TO-DO: currently coded into HTML page
 	
 	//Scale video and canvas
-	var width = window.innerWidth;
-	var height = window.innerHeight;
+	width = window.innerWidth;
+	height = window.innerHeight;
 	fitVideo();
 	fitCanvas();
 	
@@ -22,20 +37,18 @@ window.onload = function() {
 		  //document.getElementById('sliderSideBar')
 	}
 	
-	var width = window.innerWidth;
-	var height = window.innerHeight;
-	var heightIncrement = 0;
-	var widthIncrement = 0;
-	var upButton = document.getElementById("up");
-	var downButton = document.getElementById("down");
-	var smoother = new Smoother([0.9999999, 0.9999999, 0.999, 0.999], [0, 0, 0, 0]),
-		video = document.getElementById('video'),
-		test = document.getElementById('test'),
-		testContext = test.getContext('2d'),
-		headband = document.getElementById('headband'),
-		detector;
-		document.getElementById('productName').innerText = headband.alt;
-			
+	width = window.innerWidth;
+	height = window.innerHeight;
+	//var heightIncrement = 0;
+	//var widthIncrement = 0;
+	upButton = document.getElementById("up");
+	downButton = document.getElementById("down");
+	video = document.getElementById('video');
+	test = document.getElementById('test');
+	testContext = test.getContext('2d');
+	headband = document.getElementById('headband');
+	document.getElementById('productName').innerText = headband.alt;
+	
 	try {
 		compatibility.getUserMedia({video: true}, function(stream) {
 			try {
@@ -51,6 +64,8 @@ window.onload = function() {
 		alert(error);
 	}
 	
+	play();
+};
 	function play() {
 		compatibility.requestAnimationFrame(play);
 		if (video.paused) video.play();
@@ -163,4 +178,3 @@ window.onload = function() {
 		fitCanvas();
 		detector = null;
 	}		
-};
