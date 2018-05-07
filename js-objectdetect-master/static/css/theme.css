@@ -26,10 +26,10 @@ html, body {
 
 .vid {
     /*position: fixed;*/
-    height: 100vh;
+    /*height: 100vh; */
 	
     display: block;
-    margin: 0 auto;
+    margin: 0;
 	z-index: -2;
 }
 

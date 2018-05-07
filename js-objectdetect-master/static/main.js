@@ -60,8 +60,6 @@ window.onload = function() {
 		fitCanvas();
 		testContext.clearRect(0, 0, test.width, test.height);
 		
-		//Debugging  draw functions  -Jack
-		testContext.clearRect(0, 0, test.width, test.height);
 		//testContext.drawImage(logo, 0, 0, test.width/3, ((test.width/3)*173/560)); //Jess didn't want logo on video
 		
 		if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0) {
@@ -108,8 +106,8 @@ window.onload = function() {
 				*/
 				//Debugging code below:  - Jack
 
-				testContext.strokeRect(0, 0, detector.canvas.width, detector.canvas.height);
-				testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])
+				/*testContext.strokeRect(0, 0, detector.canvas.width, detector.canvas.height);
+				testContext.strokeRect(coord[0], coord[1], coord[2], coord[3])*/
 
 				//End Debugging code
 				
@@ -126,8 +124,10 @@ window.onload = function() {
 				
 				//Display headband overlay  - Jack
 				
+				/*Debugging:
 				testContext.strokeRect((coord[0] - .5 * widthIncrement), (coord[1]  - (.5 * coord[3]) + heightIncrement), (coord[2] + widthIncrement), coord[3]);
 				testContext.strokeRect(coord[0], coord[1], coord[2], coord[3]);
+				*/
 				testContext.drawImage(headband, (coord[0] - .5 * widthIncrement), (coord[1]  - (.5 * coord[3]) + heightIncrement), (coord[2] + widthIncrement), coord[3]);
 				
 			} else {

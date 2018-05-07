@@ -98,13 +98,10 @@
 			}, false);
 		}});
     }, "json");
-
-
-
 	</script>
 </head>
 <body>
-	<canvas id="canvas"; visibility: hidden></canvas>
+<canvas id="canvas"; visibility: hidden></canvas>
 <video muted autoplay playsinline id="video" class="vid"></video>
 <canvas id="test" class="vid"></canvas>
 <img id="headband" src="img/flower.png" alt="Test Headband" style="position: absolute; display: none;">
@@ -176,6 +173,7 @@
 		var hb = document.getElementById('headband');
 		var video = document.getElementById('video');
 		var canvas = document.getElementById('canvas');
+		var test = document.getElementById('test');
 		var logo = document.getElementById('logo');
 		// Get a handle on the 2d context of the canvas element
 		var context = canvas.getContext('2d');
@@ -183,8 +181,8 @@
 		var w, h, ratio;
 		// Add a listener to wait for the 'loadedmetadata' state so the video's dimensions can be read
 		video.addEventListener('loadedmetadata', function() {
-			h = video.offsetHeight;
-			w = video.offsetWidth;			
+			h = video.videoHeight;
+			w = video.videoWidth;			
 			// Set the canvas width and height to video size
 			canvas.width = w;
 			canvas.height = h;	
@@ -194,8 +192,8 @@
 		function snap() {
 			// Draw screenshot, headband, and HOH logo on canvas
 			context.drawImage(video, 0, 0, w, h);
-			context.drawImage(hb, (hb.offsetLeft - (window.innerWidth - w)/2), hb.offsetTop, hb.width, hb.height);
-			context.drawImage(logo, 0, 0, 200, 200);
+			context.drawImage(test, 0, 0, w, h);
+			context.drawImage(logo, 0, 0, (w * .15), (w * .15) );
 			//Open new tab and draw image on it
     	var win=window.open();
     	win.document.body.innerHTML = "'<img src="+canvas.toDataURL("image/png")+">'";
