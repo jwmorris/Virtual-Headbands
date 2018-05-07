@@ -24,21 +24,13 @@ html, body {
 	font-weight: 300;
 }
 
-/*.vid {
-    //position: fixed;
+.vid {
+    /*position: fixed;*/
     height: 100vh;
 	
     display: block;
     margin: 0 auto;
-}
-*/
-
-.vid {
-	position: absolute;
-    /*height: 100vh;*/
-	display: block;
-    margin: 0 auto;
-	z-index: 0;
+	z-index: -2;
 }
 
 .headband_name {
@@ -175,7 +167,7 @@ html, body {
 	font-weight: 100;
     color: white;
     display: block;
-    width: 125px;
+    height: 14%;
 }
 
 .sidenav img:hover {
@@ -272,6 +264,6 @@ html, body {
 
 #test {
 		/*border: 2px solid cyan;*/
-		z-index: 2;
+		z-index: 0;
 		position: absolute;
 }

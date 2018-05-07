@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta name="apple-mobile-web-app-capable" content="yes" charset="UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//webrtc.github.io/adapter/adapter-latest.js"></script>
+<meta name="viewport" content="width=device-width" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="js/compatibility.js"></script>
+	<script src="js/smoother.js"></script>
+	<script src="canvas.js"></script>
+	<script src="video.js"></script>
+	<script src="../js/objectdetect.js"></script>
+	<script src="../js/objectdetect.frontalface_alt.js"></script>
+	<script src="../js/objectdetect.mouth.js"></script>
+	
+	<!--Trying to refactor literally everything-->
+	<script src="main.js"></script>
+	
+	<script type="text/javascript">
+
+    	/**Headband API request and sidebar population */
+		var startingHeadband;
+    	var checkoutUrl;
+    	var allHeadbands;
+		$.get("https://lb32nbh5y5.execute-api.us-east-1.amazonaws.com/dev/headbands/", function(data, status){
+        var items = data.length;
+        allHeadbands = data;
+		
+		var currentURL = window.location.href;
+		var i;
+		var lastQuestion = 0;
+		for (i = 0; i < currentURL.length; i++) {
+		  if (currentURL.charAt(i) == '=') {
+			lastQuestion = i;
+		  }
+		} 
+		var startingHeadband = currentURL.substring(lastQuestion + 1);
+
+       	for(i = 0; i < 5; i++) {
+        	var oImg = document.createElement("img");
+    			oImg.setAttribute('src', data[i].filePath);
+    			oImg.setAttribute('alt', data[i].displayName);
+				document.getElementById("list").appendChild(oImg);
+		}
+
+		for(i = 0; i < items; i++) {
+        	var oImg = document.createElement("img");
+    			oImg.setAttribute('src', data[i].filePath);
+    			oImg.setAttribute('alt', data[i].displayName);
+				document.getElementById("overlayList").appendChild(oImg);
+				
+				if(data[i].headbandName == startingHeadband) {
+					var prodName = document.getElementById('productName');
+					//prodName.addEventListener('load', function() {
+						headband.src = data[i].filePath;
+						prodName.innerText = data[i].displayName;
+					//}
+				}
+				
+		}
+
+		var moreHbBtn = document.createElement("button");
+		moreHbBtn.setAttribute('onclick', 'openNav()');
+		moreHbBtn.innerText = "More Headbands";
+		document.getElementById("list").appendChild(moreHbBtn);
+
+		[].slice.call(document.getElementById('list').children).forEach(function(e) {
+			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
+					headband.src = e.src;
+					document.getElementById('productName').innerText = e.alt;
+					for(i = 0; i < items; i++) {
+						if(allHeadbands[i].displayName == e.alt) {
+							checkoutUrl = allHeadbands[i].url;
+							break;
+						}
+					}
+
+			}, false);
+		}});
+		
+		[].slice.call(document.getElementById('overlayList').children).forEach(function(e) {
+			if(e.tagName.toLowerCase() == 'img'){e.addEventListener('click', function() {
+					headband.src = e.src;
+					document.getElementById('productName').innerText = e.alt;
+					closeNav();
+					for(i = 0; i < items; i++) {
+						if(allHeadbands[i].displayName == e.alt) {
+							checkoutUrl = allHeadbands[i].url;
+							break;
+						}
+					}
+			}, false);
+		}});
+    }, "json");
+
+
+
+	</script>
+</head>
+<body>
+	<canvas id="canvas"; visibility: hidden></canvas>
+<video muted autoplay playsinline id="video" class="vid"></video>
+<canvas id="test" class="vid"></canvas>
+<img id="headband" src="img/flower.png" alt="Test Headband" style="position: absolute; display: none;">
+
+
+<div id= "sliderSideBar" class="updownedit" align="center">
+		
+		
+		<img id="logo" src="img/Virtual Closet Logo-02.png">
+		
+		<!-- Sliders -->
+		<p id = heightName style= "position: relative; font-size:200%; width: 50%; color: white; text-shadow: 2px 2px 4px #000000;">Height:</p>
+		<div style="height: 27.5%;">
+		<input type="range" min="1" max="100" value="50" class="slider" align="left" id="sliderHeight" style="top: 43%; transform: rotate(90deg); ">
+		</div>	
+		<div>
+		<p id = widthName style="position: relative; font-size: 200%; width: 50%; color: white; text-shadow: 2px 2px 4px #000000;">Width:</p>
+		</div>
+		<div style="height:27.5%;">
+		<input type="range" min="1" max="100" value="50" class="slider" style="transform: rotate(-90deg); top: 43%;" id="sliderWidth">
+		</div>
+</div>
+
+
+<div class="sidenav" id="list" align="center">
+		<!-- <button onclick="openNav()">More Headbands</button>  -->
+</div> 
+
+<div id="sidenavbig" class="sidenavbig">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+		<div id="overlayList" class="overlayList" align="center">
+			<h1 style="color:white;"> Additional Headbands</h1>
+			<!--<img src="img/flower.png" alt="Blue Flower" style="width: 125px;">
+			<img src="img/headband_mesh.png" alt="Mesh Headband" style="width: 125px;">
+			<img src="img/headband_stones.png" alt="Stones Flower" style="width: 125px;">
+			<img src="img/headband_floral.png" alt="Floral Headband" style="width: 125px;">
+			<img src="img/414.png" alt="White Flower" style="width: 125px;">
+			<img src="img/Bohemian_Headband.png" style="width: 125px;">
+			<img src="img/Cat_Ear_Headband.png" style="width: 125px;">
+			<img src="img/Fire_Headband.png" style="width: 125px;">
+			<img src="img/H.png" style="width: 125px;">
+			<img src="img/Rising_Sun_Headband.png" style="width: 125px;">
+			<img src="img/Red.png" style="width: 125px;">
+			<img src="img/414.png" alt="White Flower" style="width: 125px;">-->
+		</div>
+</div>
+
+<img id="logo" src="img/HOH_logo.png" visibility: hidden>
+
+<!-- Optional: some overlay text to describe the video -->
+<div class="content" align="center">
+  <!-- <h1>Headbands of Hope Virtual Closet</h1> -->
+ 
+  <p id = productName style= "position: relative; bottom: 20%; font-size: 300%; text-shadow: 2px 2px 4px #000000;"> </p>
+
+  <!-- Use a button to pause/play the video with JavaScript -->
+  <div style= "position: absolute; left: 0; top: 55%; width: 100%; height: 35%;">
+  
+	<!--<button id="Add to Cart"  class="bottom_buttons" onclick="addToCart()">Add to Cart</button>-->
+	<button id="take_picture" class="bottom_buttons" onclick="snap()">Take a picture</button>
+	<button id="checkout" class="bottom_buttons" onclick="checkout()">Product Page</button>
+  </div>
+</div>
+<script src="canvas.js"></script>
+<script>
+		// This does not work with current display implementation  - Jack
+		// Get handles on the video and canvas elements
+		var hb = document.getElementById('headband');
+		var video = document.getElementById('video');
+		var canvas = document.getElementById('canvas');
+		var logo = document.getElementById('logo');
+		// Get a handle on the 2d context of the canvas element
+		var context = canvas.getContext('2d');
+		// Define some vars required later
+		var w, h, ratio;
+		// Add a listener to wait for the 'loadedmetadata' state so the video's dimensions can be read
+		video.addEventListener('loadedmetadata', function() {
+			h = video.offsetHeight;
+			w = video.offsetWidth;			
+			// Set the canvas width and height to video size
+			canvas.width = w;
+			canvas.height = h;	
+		}, false);
+		
+		// Takes a snapshot of the video
+		function snap() {
+			// Draw screenshot, headband, and HOH logo on canvas
+			context.drawImage(video, 0, 0, w, h);
+			context.drawImage(hb, (hb.offsetLeft - (window.innerWidth - w)/2), hb.offsetTop, hb.width, hb.height);
+			context.drawImage(logo, 0, 0, 200, 200);
+			//Open new tab and draw image on it
+    	var win=window.open();
+    	win.document.body.innerHTML = "'<img src="+canvas.toDataURL("image/png")+">'";
+		}
+		 
+	</script>
+	
+	<script>
+	function openNav() {	
+		document.getElementById("sidenavbig").style.width = "100%";
+	}
+
+	function closeNav() {
+		document.getElementById("sidenavbig").style.width = "0";
+	}
+	</script>
+	
+	<script>
+	var cartSize = 0;
+	var headBandArray = [];
+	function addToCart() {
+		
+		cartSize = cartSize + 1;
+		headBandArray[headBandArray.length] = document.getElementById('productName').innerText;
+		//Add to an array
+		
+		document.getElementById('checkout').innerHTML = "Checkout (" + cartSize + ")" ;
+	}
+	function checkout() {
+		//var contents = "";
+		//for(i = 0; i < headBandArray.length; i++) {
+		//	contents += headBandArray[i] + "\n";
+		//}
+		//var direct = confirm("You are heading to checkout with:\n" + contents );
+
+		//if (direct==true) {
+			window.location.replace(checkoutUrl);
+			//https://www.headbandsofhope.com/cart
+		//} else {
+		//	alert("wut, buy our headbands yo");
+		//}
+	}
+	</script>
+	
+</body>
+</html>
