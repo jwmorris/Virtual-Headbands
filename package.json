@@ -1,0 +1,24 @@
+{
+  "name": "2018springteam26",
+  "version": "1.0.0",
+  "description": "Testing",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "istanbul": "^0.4.5"
+  },
+  "devDependencies": {
+    "mocha": "^5.1.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.ncsu.edu/engr-csc-sdc/2018SpringTeam26"
+  },
+  "author": "",
+  "license": "ISC"
+}
